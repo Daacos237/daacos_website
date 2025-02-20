@@ -11,30 +11,11 @@ class TabletteRender extends StatefulWidget {
 
 class _TabletteRenderState extends State<TabletteRender> {
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey _serviceSectionKey = GlobalKey();
 
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void _scrollToServiceSection() {
-    final context = _serviceSectionKey.currentContext;
-    if (context != null) {
-      Scrollable.ensureVisible(context,
-          duration: Duration(seconds: 1), curve: Curves.easeInOut);
-    }
-  }
-
-  _openBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Database.secondary,
-      builder: (context) => CustomNavBar(
-        onServiceTap: _scrollToServiceSection,
-      ),
-    );
   }
 
   @override
@@ -43,12 +24,7 @@ class _TabletteRenderState extends State<TabletteRender> {
       backgroundColor: Database.secondary,
       appBar: AppBar(
         toolbarHeight: 70,
-        flexibleSpace: GlobalAppBar(
-          ontap: () {
-            _openBottomSheet();
-          },
-          onServiceTap: _scrollToServiceSection,
-        ),
+        flexibleSpace: GlobalAppBar(),
       ),
       body: Stack(
         children: [
@@ -57,8 +33,9 @@ class _TabletteRenderState extends State<TabletteRender> {
             child: Column(
               children: [
                 LandingPage(),
-                ServiceSection(key: _serviceSectionKey),
                 TestimonialSection(),
+                ServiceSection(),
+                // ContactSection(),
                 Footer(),
               ],
             ),

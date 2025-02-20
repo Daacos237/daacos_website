@@ -12,12 +12,21 @@ class MobileRender extends StatefulWidget {
 
 class _MobileRenderState extends State<MobileRender> {
   final ScrollController _scrollController = ScrollController();
+  final GlobalKey _landingPageKey = GlobalKey();
   final GlobalKey _serviceSectionKey = GlobalKey();
 
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _scrollToLandingPage() {
+    final context = _landingPageKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(context,
+          duration: Duration(seconds: 1), curve: Curves.easeInOut);
+    }
   }
 
   void _scrollToServiceSection() {
@@ -33,6 +42,7 @@ class _MobileRenderState extends State<MobileRender> {
       context: context,
       backgroundColor: Database.secondary,
       builder: (context) => CustomNavBar(
+        // onHomeTap: _scrollToLandingPage,
         onServiceTap: _scrollToServiceSection,
       ),
     );
@@ -50,6 +60,7 @@ class _MobileRenderState extends State<MobileRender> {
           ontap: () {
             _openBottomSheet();
           },
+          // onHomeTap: _scrollToLandingPage,
           onServiceTap: _scrollToServiceSection,
         ),
       ),
@@ -59,7 +70,7 @@ class _MobileRenderState extends State<MobileRender> {
             controller: _scrollController,
             child: Column(
               children: [
-                LandingPage(),
+                LandingPage(key: _landingPageKey),
                 ServiceSection(key: _serviceSectionKey),
                 TestimonialSection(),
                 Footer()

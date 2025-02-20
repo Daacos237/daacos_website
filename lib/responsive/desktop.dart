@@ -19,6 +19,7 @@ class _DesktopRenderState extends State<DesktopRender>
   late Animation<Offset> _slideAnimation;
 
   late ScrollController _scrollController;
+  final GlobalKey _landingPageKey = GlobalKey();
   final GlobalKey _serviceSectionKey = GlobalKey();
 
   @override
@@ -49,6 +50,14 @@ class _DesktopRenderState extends State<DesktopRender>
     _animationController.forward();
   }
 
+  void _scrollToLandingPage() {
+    final context = _landingPageKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(context,
+          duration: Duration(seconds: 1), curve: Curves.easeInOut);
+    }
+  }
+
   void _scrollToServiceSection() {
     final context = _serviceSectionKey.currentContext;
     if (context != null) {
@@ -71,6 +80,7 @@ class _DesktopRenderState extends State<DesktopRender>
       backgroundColor: Database.secondary,
       appBar: AppBar(
         flexibleSpace: GlobalAppBar(
+          //onHomeTap: _scrollToLandingPage,
           onServiceTap: _scrollToServiceSection,
         ),
         toolbarHeight: 70,
@@ -86,7 +96,7 @@ class _DesktopRenderState extends State<DesktopRender>
                   opacity: _fadeAnimation,
                   child: SlideTransition(
                     position: _slideAnimation,
-                    child: LandingPage(),
+                    child: LandingPage(key: _landingPageKey),
                   ),
                 ),
                 ServiceSection(key: _serviceSectionKey),
